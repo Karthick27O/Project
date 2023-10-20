@@ -6,16 +6,23 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.databinding.databinding.ActivityThirdBinding
+import com.example.databinding.koin.Component
+import org.koin.android.ext.android.inject
+import org.koin.core.component.inject
 import java.util.regex.Pattern
+import com.example.databinding.PrefHelper
+
 
 class Third_Activity : AppCompatActivity() {
+//    val prefHelper: PrefHelper by inject()
     private lateinit var binding: ActivityThirdBinding
-    private lateinit var prefHelper: PrefHelper
+//    private lateinit var prefHelper: PrefHelper
+    private val component = Component()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_third)
-        prefHelper = PrefHelper(this)
+//        prefHelper = PrefHelper(this)
 
         binding.buttonRegister.setOnClickListener {
             val name = binding.editName.text.toString()
@@ -39,22 +46,15 @@ class Third_Activity : AppCompatActivity() {
                 finish()
             }
 
-//            if (validateName(name)&&validateNumber(number)&&validateEmail(email)) {
-//                saveRegistrationData(name, number, email)
-//                showMessage("Registration successful")
-//                startActivity(Intent(this, MainActivity::class.java))
-//                finish()
-//            } else {
-//                showMessage("Invalid input. Please check your input fields.")
-//            }
+
         }
     }
 
     private fun saveRegistrationData(userName: String, number: String, email: String) {
 
-        prefHelper.put(Constant.PREF_USERNAME, userName)
-        prefHelper.put(Constant.PREF_PHONE, number)
-        prefHelper.put(Constant.PREF_EMAIL, email)
+        component.prefHelper.put(Constant.PREF_USERNAME, userName)
+        component.prefHelper.put(Constant.PREF_PHONE, number)
+        component.prefHelper.put(Constant.PREF_EMAIL, email)
 
     }
 
@@ -79,3 +79,11 @@ class Third_Activity : AppCompatActivity() {
 
 
 }
+//            if (validateName(name)&&validateNumber(number)&&validateEmail(email)) {
+//                saveRegistrationData(name, number, email)
+//                showMessage("Registration successful")
+//                startActivity(Intent(this, MainActivity::class.java))
+//                finish()
+//            } else {
+//                showMessage("Invalid input. Please check your input fields.")
+//            }

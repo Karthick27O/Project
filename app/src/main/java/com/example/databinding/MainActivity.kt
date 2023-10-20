@@ -6,17 +6,23 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.databinding.databinding.ActivityMainBinding
+import org.koin.android.ext.android.inject
 import java.util.regex.Pattern
+import com.example.databinding.PrefHelper
+import com.example.databinding.koin.Component
+
 
 class MainActivity : AppCompatActivity() {
+//    val prefHelper: PrefHelper by inject()
     private lateinit var binding: ActivityMainBinding
-    lateinit var prefHelper: PrefHelper
+    private val component = Component()
+//    lateinit var prefHelper: PrefHelper
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
-        prefHelper = PrefHelper(this)
+//        prefHelper = PrefHelper(this)
         binding.buttonLogin.setOnClickListener {
             val name = binding.editUserName.text.toString()
             val password =binding.editpassword.text.toString()
@@ -45,15 +51,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (prefHelper.getBoolean( Constant.PREF_IS_LOGIN )) {
+        if (component.prefHelper.getBoolean( Constant.PREF_IS_LOGIN )) {
             moveIntent()
         }
     }
 
     private fun saveSession(username: String, password: String){
-        prefHelper.put( Constant.PREF_USERNAME, username )
-        prefHelper.put( Constant.PREF_PASSWORD, password )
-        prefHelper.put( Constant.PREF_IS_LOGIN, true)
+        component.prefHelper.put( Constant.PREF_USERNAME, username )
+        component.prefHelper.put( Constant.PREF_PASSWORD, password )
+        component.prefHelper.put( Constant.PREF_IS_LOGIN, true)
     }
 
     private fun moveIntent(){
