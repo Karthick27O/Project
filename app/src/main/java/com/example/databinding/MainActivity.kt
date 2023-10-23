@@ -48,11 +48,7 @@ class MainActivity : AppCompatActivity() {
                 showMessage("Login Successful")
                 prefHelper.put(Constant.PREF_IS_LOGIN, true)
                 prefHelper.put(Constant.PREF_USERNAME, userData.userName.orEmpty())
-                val intent = Intent(this@MainActivity, SecondActivity::class.java).apply {
-                    putExtra("USERNAME", userData.userName)
-                    putExtra("EMAIL", userData.email)
-                    putExtra("NUMBER", userData.number)
-                }
+                val intent = Intent(this@MainActivity, SecondActivity::class.java)
                 startActivity(intent)
                 finish()
             }
