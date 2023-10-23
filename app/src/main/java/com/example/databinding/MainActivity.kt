@@ -13,13 +13,13 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appDb: AppDataBase
     private lateinit var binding: ActivityMainBinding
     private val prefHelper: PrefHelper by inject()
+    private val appDb: AppDataBase by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appDb = AppDataBase.getDatabase(this)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         if (prefHelper.getBoolean(Constant.PREF_IS_LOGIN)) {
