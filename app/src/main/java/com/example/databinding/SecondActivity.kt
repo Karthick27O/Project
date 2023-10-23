@@ -5,52 +5,47 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import com.example.databinding.databinding.ActivitySecondBinding
-import com.example.databinding.koin.Component
 import com.example.databinding.room_db.AppDataBase
 import com.example.databinding.room_db.UserData
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.inject
 
 
 class SecondActivity : AppCompatActivity() {
 
     private lateinit var appDb: AppDataBase
-    lateinit var binding: ActivitySecondBinding
-    private val component = Component()
+    private lateinit var binding: ActivitySecondBinding
+    private val prefHelper: PrefHelper by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appDb = AppDataBase.getDatabase(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_second)
 
-        val userName= intent.getStringExtra("USERNAME")
+        val userName = prefHelper.getString(Constant.PREF_USERNAME)
 
-        if(userName!=null)
-        {
+        if (userName != null) {
             lateinit var userData: UserData
-
-
-            GlobalScope.launch(Dispatchers.IO) {
-
-                userData =appDb.userDao().findByRoll(userName.toString())
+            lifecycleScope.launch {
+                userData = appDb.userDao().findByRoll(userName.toString())
                 displayData(userData)
             }
         }
 
-
         binding.buttonLogout.setOnClickListener {
-            component.prefHelper.clear()
+            prefHelper.clear()
             showMessage("Clear")
             moveIntent()
         }
-
     }
-    private suspend fun displayData(userData: UserData){
 
-        withContext(Dispatchers.Main){
+    private suspend fun displayData(userData: UserData) {
+
+        withContext(Dispatchers.Main) {
 
             binding.textUsername.text = userData.userName
             binding.textEmail.text = userData.email
@@ -66,8 +61,15 @@ class SecondActivity : AppCompatActivity() {
     }
 
     private fun showMessage(message: String) {
-        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+        val actualMessage = "Clear"
+        if (message == actualMessage) {
+            Toast.makeText(applicationContext, actualMessage, Toast.LENGTH_SHORT).show()
+        } else {
+            // Handle other cases if needed
+            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+        }
     }
+
 }
 
 //        binding.textUsername.text= userName

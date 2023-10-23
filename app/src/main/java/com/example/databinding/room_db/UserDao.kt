@@ -15,7 +15,7 @@ interface UserDao {
     suspend fun insert(userData: UserData)
 
     @Query("SELECT * FROM userData_table WHERE User_Name = :username AND Password = :password")
-    fun getUserByUsernameAndPassword(username: String?, password: String?): UserData
+    suspend fun getUserByUsernameAndPassword(username: String?, password: String?): UserData
 
     @Query("SELECT * FROM userData_table WHERE User_Name LIKE :roll LIMIT 1")
     suspend fun findByRoll(roll: String): UserData

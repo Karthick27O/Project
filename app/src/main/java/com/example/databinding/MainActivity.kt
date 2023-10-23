@@ -1,35 +1,28 @@
 package com.example.databinding
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.room.Room
+import androidx.lifecycle.lifecycleScope
 import com.example.databinding.databinding.ActivityMainBinding
-import java.util.regex.Pattern
-import com.example.databinding.koin.Component
 import com.example.databinding.room_db.AppDataBase
-import com.example.databinding.room_db.UserData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.android.ext.android.bind
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appDb: AppDataBase
     private lateinit var binding: ActivityMainBinding
-    private val component = Component()
+    private val prefHelper: PrefHelper by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appDb = AppDataBase.getDatabase(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        if (component.prefHelper.getBoolean(Constant.PREF_IS_LOGIN)) {
+        if (prefHelper.getBoolean(Constant.PREF_IS_LOGIN)) {
             moveIntent()
         }
 
@@ -38,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.buttonRegister.setOnClickListener {
-            startActivity(Intent(this, Third_Activity::class.java))
+            startActivity(Intent(this, ThirdActivity::class.java))
         }
     }
 
@@ -49,26 +42,19 @@ class MainActivity : AppCompatActivity() {
         val userDao = appDb.userDao()
 
         if (userName.isNotEmpty() && password.isNotEmpty()) {
-            GlobalScope.launch(Dispatchers.IO) {
+            lifecycleScope.launch {
                 val userData = userDao.getUserByUsernameAndPassword(userName, password)
 
-                withContext(Dispatchers.Main) {
-                    if (userData != null) {
-                        showMessage("Login Successful")
-                        component.prefHelper.put(Constant.PREF_IS_LOGIN, true)
-                        val intent = Intent(this@MainActivity, SecondActivity::class.java).apply {
-                            // Pass the retrieved user data as extras to SecondActivity
-                            putExtra("USERNAME", userData.userName)
-                            putExtra("EMAIL", userData.email)
-                            putExtra("NUMBER", userData.number)
-                        }
-                        startActivity(intent)
-                        finish()
-
-                    } else {
-                        showMessage("Invalid Login")
-                    }
+                showMessage("Login Successful")
+                prefHelper.put(Constant.PREF_IS_LOGIN, true)
+                prefHelper.put(Constant.PREF_USERNAME, userData.userName.orEmpty())
+                val intent = Intent(this@MainActivity, SecondActivity::class.java).apply {
+                    putExtra("USERNAME", userData.userName)
+                    putExtra("EMAIL", userData.email)
+                    putExtra("NUMBER", userData.number)
                 }
+                startActivity(intent)
+                finish()
             }
         } else {
             showMessage("Invalid Login")
@@ -81,9 +67,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showMessage(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        val actualMessage = "Clear"
+        if (message == actualMessage) {
+            Toast.makeText(applicationContext, actualMessage, Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+        }
     }
+
+//    private fun showMessage(message: String) {
+//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+//    }
+
+//    private fun saveSession(username: String) {
+//        val intent = Intent(this@MainActivity, SecondActivity::class.java).apply {
+//            putExtra("USERNAME", username)
+//
+//        }
 }
+
 
 //sharedpref method
 //        prefHelper = PrefHelper(this)
@@ -110,7 +112,7 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 //        binding.buttonRegister.setOnClickListener {
-//            startActivity(Intent(this,Third_Activity::class.java))
+//            startActivity(Intent(this,ThirdActivity::class.java))
 //        }
 //
 //    }
