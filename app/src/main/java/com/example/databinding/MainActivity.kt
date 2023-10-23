@@ -74,16 +74,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
         }
     }
-
-//    private fun showMessage(message: String) {
-//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-//    }
-
-//    private fun saveSession(username: String) {
-//        val intent = Intent(this@MainActivity, SecondActivity::class.java).apply {
-//            putExtra("USERNAME", username)
-//
-//        }
 }
 
 
