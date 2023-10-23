@@ -17,13 +17,12 @@ import org.koin.android.ext.android.inject
 
 class SecondActivity : AppCompatActivity() {
 
-    private lateinit var appDb: AppDataBase
+    private val appDb: AppDataBase by inject()
     private lateinit var binding: ActivitySecondBinding
     private val prefHelper: PrefHelper by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appDb = AppDataBase.getDatabase(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_second)
 
         val userName = prefHelper.getString(Constant.PREF_USERNAME)

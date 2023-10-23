@@ -12,15 +12,15 @@ import java.util.regex.Pattern
 import com.example.databinding.room_db.UserData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 
 class ThirdActivity : AppCompatActivity() {
     private lateinit var binding: ActivityThirdBinding
-    private lateinit var appDb: AppDataBase
+    private val appDb: AppDataBase by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appDb = AppDataBase.getDatabase(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_third)
 
         binding.buttonRegister.setOnClickListener {
