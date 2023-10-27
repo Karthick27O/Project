@@ -15,11 +15,12 @@ import com.example.databinding.R
 import com.example.databinding.databinding.Fragment2Binding
 import com.example.databinding.retrofit.RetrofitInstance
 import com.example.databinding.retrofit.TodoAdapter
+import org.koin.android.ext.android.inject
 import retrofit2.HttpException
 import java.io.IOException
 
 class Fragment2: Fragment(R.layout.fragment2) {
-
+    private val retrofitInstance : RetrofitInstance by inject()
     private lateinit var binding:Fragment2Binding
     private lateinit var todoAdapter: TodoAdapter
 
@@ -34,7 +35,7 @@ class Fragment2: Fragment(R.layout.fragment2) {
         lifecycleScope.launchWhenCreated {
             binding.progressBar.isVisible = true
             val response = try {
-                RetrofitInstance.api.getTodos()
+                retrofitInstance.api.getTodos()
             } catch(e: IOException) {
                 Log.e(ContentValues.TAG, "IOException, you might not have internet connection")
                 binding.progressBar.isVisible = false

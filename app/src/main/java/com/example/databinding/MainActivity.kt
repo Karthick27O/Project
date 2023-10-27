@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.example.databinding.databinding.ActivityMainBinding
+import com.example.databinding.fragment.ActivityFragment
 import com.example.databinding.room_db.AppDataBase
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                 showMessage("Login Successful")
                 prefHelper.put(Constant.PREF_IS_LOGIN, true)
                 prefHelper.put(Constant.PREF_USERNAME, userData.userName.orEmpty())
-                val intent = Intent(this@MainActivity, SecondActivity::class.java).apply {
+                val intent = Intent(this@MainActivity,ActivityFragment::class.java).apply {
                     putExtra("USERNAME", userData.userName)
                     putExtra("EMAIL", userData.email)
                     putExtra("NUMBER", userData.number)
@@ -61,7 +62,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun moveIntent() {
-        startActivity(Intent(this, SecondActivity::class.java))
+        startActivity(Intent(this, ActivityFragment::class.java))
         finish()
     }
 
