@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.databinding.R
-import com.example.databinding.databinding.Fragment1Binding
 import com.example.databinding.databinding.Fragment2Binding
 import com.example.databinding.retrofit.RetrofitInstance
 import com.example.databinding.retrofit.TodoAdapter
