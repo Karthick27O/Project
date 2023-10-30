@@ -1,3 +1,4 @@
+
 package com.example.databinding.fragment
 
 import android.content.ContentValues
@@ -15,6 +16,7 @@ import com.example.databinding.R
 import com.example.databinding.databinding.Fragment2Binding
 import com.example.databinding.retrofit.RetrofitInstance
 import com.example.databinding.retrofit.TodoAdapter
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import retrofit2.HttpException
 import java.io.IOException
@@ -27,23 +29,24 @@ class Fragment2: Fragment(R.layout.fragment2) {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
 
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment2,container,false)
         setupRecyclerView()
 
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launch {
             binding.progressBar.isVisible = true
             val response = try {
                 retrofitInstance.api.getTodos()
             } catch(e: IOException) {
                 Log.e(ContentValues.TAG, "IOException, you might not have internet connection")
                 binding.progressBar.isVisible = false
-                return@launchWhenCreated
+                return@launch
             } catch (e: HttpException) {
                 Log.e(ContentValues.TAG, "HttpException, unexpected response")
                 binding.progressBar.isVisible = false
-                return@launchWhenCreated
+
+                return@launch
             }
             if(response.isSuccessful && response.body() != null) {
                 todoAdapter.todos = response.body()!!

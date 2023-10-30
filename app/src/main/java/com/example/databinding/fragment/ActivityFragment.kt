@@ -20,7 +20,7 @@ class ActivityFragment : AppCompatActivity() {
 
         setCurrentFragment(firstFragment)
 
-        binding.bottomNavigationView.setOnNavigationItemSelectedListener{
+        binding.bottomNavigationView.setOnItemSelectedListener{
             when(it.itemId){
                 R.id.mihome -> setCurrentFragment(firstFragment)
                 R.id.miuser -> setCurrentFragment(secondFragment)
