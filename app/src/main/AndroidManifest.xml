@@ -18,7 +18,7 @@
             android:name=".fragment.ActivityFragment"
             android:exported="false"/>
         <activity
-            android:name=".ThirdActivity"
+            android:name=".SecondActivity"
             android:exported="false" />
         <activity
             android:name=".SecondActivity"

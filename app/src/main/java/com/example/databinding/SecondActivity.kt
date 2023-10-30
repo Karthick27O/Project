@@ -8,73 +8,132 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.example.databinding.databinding.ActivitySecondBinding
 import com.example.databinding.room_db.AppDataBase
+import java.util.regex.Pattern
 import com.example.databinding.room_db.UserData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 
 
 class SecondActivity : AppCompatActivity() {
-
-    private val appDb: AppDataBase by inject()
     private lateinit var binding: ActivitySecondBinding
-    private val prefHelper: PrefHelper by inject()
+    private val appDb: AppDataBase by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_second)
 
-        val userName = prefHelper.getString(Constant.PREF_USERNAME)
+        binding.buttonRegister.setOnClickListener {
+            saveRegistration()
+        }
+        binding.buttonBack.setOnClickListener {
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
+        }
+    }
 
-        if (userName != null) {
-            lateinit var userData: UserData
-            lifecycleScope.launch {
-                userData = appDb.userDao().findByRoll(userName.toString())
-                displayData(userData)
+    private fun saveRegistration() {
+        val name = binding.editName.text.toString()
+        val number = binding.editNumber.text.toString()
+        val email = binding.editEmail.text.toString()
+        val password = binding.editPassword.text.toString()
+
+        if (name.isEmpty() || !validateName(name)) {
+            binding.editName.error =
+                "Invalid name. Name must be at least 2 characters long and contain only letters and spaces."
+        }
+
+        if (email.isEmpty() || !validateEmail(email)) {
+            binding.editEmail.error = "Invalid email address"
+        }
+
+        if (number.isEmpty() || !validateNumber(number)) {
+            binding.editNumber.error = "Invalid phone number"
+        }
+
+        if (password.isEmpty()||!validatePassword(password)) {
+            binding.editPassword.error =
+                "Invalid Password. At least one lowercase,one uppercase letter,one digit,one special character (either @, \$, !, %, *, ?, or &)and  password must be at least 8 characters long"
+        } else {
+            val userData = UserData(null, name, email, number, password)
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                appDb.userDao().insert(userData)
             }
+            showMessage("Registration successful")
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
-
-        binding.buttonLogout.setOnClickListener {
-            prefHelper.clear()
-            showMessage("Clear")
-            moveIntent()
-        }
-    }
-
-    private suspend fun displayData(userData: UserData) {
-
-        withContext(Dispatchers.Main) {
-
-            binding.textUsername.text = userData.userName
-            binding.textEmail.text = userData.email
-            binding.textPhoneNumber.text = userData.number
-
-        }
-
-    }
-
-    private fun moveIntent() {
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
     }
 
     private fun showMessage(message: String) {
-        val actualMessage = "Clear"
-        if (message == actualMessage) {
-            Toast.makeText(applicationContext, actualMessage, Toast.LENGTH_SHORT).show()
-        } else {
-            // Handle other cases if needed
-            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-        }
+        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     }
 
+
+    private fun validateName(name: String): Boolean {
+        val namePattern = Pattern.compile("^[a-zA-Z ]{2,}\$")
+        val matcher = namePattern.matcher(name)
+        return matcher.matches()
+    }
+
+    private fun validateNumber(number: String): Boolean {
+        // You can use a specific regex pattern for phone numbers validation
+        val phoneRegex = "^[0-9]{10}\$"
+        return number.matches(phoneRegex.toRegex())
+    }
+
+    private fun validateEmail(email: String): Boolean {
+        val emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\$"
+        return email.matches(emailRegex.toRegex())
+    }
+
+    private fun validatePassword(password: String): Boolean {
+           val passwordPattern =
+            Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}\$")
+        val matcher = passwordPattern.matcher(password)
+        return matcher.matches()
+    }
+
+
 }
-
-//        binding.textUsername.text= userName
-//        binding.textEmail.text = email
-//        binding.textPhoneNumber.text = number
-
-//        binding.textUsername.text = component.prefHelper.getString( Constant.PREF_USERNAME )
-//        binding.textEmail.text=component.prefHelper.getString( Constant.PREF_EMAIL)
-//        binding.textPhoneNumber.text=component.prefHelper.getString( Constant.PREF_PHONE)
+//Shared Preference method
+//binding.buttonRegister.setOnClickListener {
+//    val name = binding.editName.text.toString()
+//    val number = binding.editNumber.text.toString()
+//    val email = binding.editEmail.text.toString()
+//
+//    if (name.isEmpty()||!validateName(name)) {
+//        binding.editName.error = "Invalid name. Name must be at least 2 characters long and contain only letters and spaces."
+//    }
+//    if (email.isEmpty()||!validateEmail(email)) {
+//        binding.editEmail.error = "Invalid email address"
+//    }
+//    if (number.isEmpty()||!validateNumber(number)) {
+//        binding.editNumber.error = "Invalid phone number"
+//    }
+//    else
+//    {
+//        saveRegistrationData(name, number, email)
+//        showMessage("Registration successful")
+//        startActivity(Intent(this, MainActivity::class.java))
+//        finish()
+//    }
+//    private fun saveRegistrationData(userName: String, number: String, email: String) {
+//
+//        component.prefHelper.put(Constant.PREF_USERNAME, userName)
+//        component.prefHelper.put(Constant.PREF_PHONE, number)
+//        component.prefHelper.put(Constant.PREF_EMAIL, email)
+//
+//    }
+//
+//
+//}
+//            if (validateName(name)&&validateNumber(number)&&validateEmail(email)) {
+//                saveRegistrationData(name, number, email)
+//                showMessage("Registration successful")
+//                startActivity(Intent(this, MainActivity::class.java))
+//                finish()
+//            } else {
+//                showMessage("Invalid input. Please check your input fields.")
+//            }

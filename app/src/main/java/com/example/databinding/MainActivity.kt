@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.buttonRegister.setOnClickListener {
-            startActivity(Intent(this, ThirdActivity::class.java))
+            startActivity(Intent(this, SecondActivity::class.java))
         }
     }
 
@@ -48,11 +48,7 @@ class MainActivity : AppCompatActivity() {
                 showMessage("Login Successful")
                 prefHelper.put(Constant.PREF_IS_LOGIN, true)
                 prefHelper.put(Constant.PREF_USERNAME, userData.userName.orEmpty())
-                val intent = Intent(this@MainActivity,ActivityFragment::class.java).apply {
-                    putExtra("USERNAME", userData.userName)
-                    putExtra("EMAIL", userData.email)
-                    putExtra("NUMBER", userData.number)
-                }
+                val intent = Intent(this@MainActivity, ActivityFragment::class.java)
                 startActivity(intent)
                 finish()
             }
@@ -62,8 +58,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun moveIntent() {
-        startActivity(Intent(this, ActivityFragment
-        ::class.java))
+        startActivity(
+            Intent(
+                this, ActivityFragment::class.java
+            )
+        )
         finish()
     }
 
