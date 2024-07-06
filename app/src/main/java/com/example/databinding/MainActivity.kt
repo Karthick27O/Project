@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         if (prefHelper.getBoolean(Constant.PREF_IS_LOGIN)) {
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.buttonRegister.setOnClickListener {
-            startActivity(Intent(this, RegistrationActivity::class.java))
+            startActivity(Intent(this, ThirdActivity::class.java))
         }
     }
 
