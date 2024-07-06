@@ -16,12 +16,12 @@ import org.koin.android.ext.android.inject
 
 
 class ThirdActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityThirdBinding
+    private lateinit var binding: ActivitySecondBinding
     private val appDb: AppDataBase by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_third)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_second)
 
         binding.buttonRegister.setOnClickListener {
             saveRegistration()
@@ -97,43 +97,3 @@ class ThirdActivity : AppCompatActivity() {
 
 
 }
-//Shared Preference method
-//binding.buttonRegister.setOnClickListener {
-//    val name = binding.editName.text.toString()
-//    val number = binding.editNumber.text.toString()
-//    val email = binding.editEmail.text.toString()
-//
-//    if (name.isEmpty()||!validateName(name)) {
-//        binding.editName.error = "Invalid name. Name must be at least 2 characters long and contain only letters and spaces."
-//    }
-//    if (email.isEmpty()||!validateEmail(email)) {
-//        binding.editEmail.error = "Invalid email address"
-//    }
-//    if (number.isEmpty()||!validateNumber(number)) {
-//        binding.editNumber.error = "Invalid phone number"
-//    }
-//    else
-//    {
-//        saveRegistrationData(name, number, email)
-//        showMessage("Registration successful")
-//        startActivity(Intent(this, MainActivity::class.java))
-//        finish()
-//    }
-//    private fun saveRegistrationData(userName: String, number: String, email: String) {
-//
-//        component.prefHelper.put(Constant.PREF_USERNAME, userName)
-//        component.prefHelper.put(Constant.PREF_PHONE, number)
-//        component.prefHelper.put(Constant.PREF_EMAIL, email)
-//
-//    }
-//
-//
-//}
-//            if (validateName(name)&&validateNumber(number)&&validateEmail(email)) {
-//                saveRegistrationData(name, number, email)
-//                showMessage("Registration successful")
-//                startActivity(Intent(this, MainActivity::class.java))
-//                finish()
-//            } else {
-//                showMessage("Invalid input. Please check your input fields.")
-//            }

@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun moveIntent() {
-        startActivity(Intent(this, SecondActivity::class.java))
+        startActivity(Intent(this, ActivityFragment::class.java))
         finish()
     }
 
