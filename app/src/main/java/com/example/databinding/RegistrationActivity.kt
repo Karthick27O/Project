@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 
-class SecondActivity : AppCompatActivity() {
+class RegistrationActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySecondBinding
     private val appDb: AppDataBase by inject()
 

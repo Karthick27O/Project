@@ -38,7 +38,7 @@ class Fragment1: Fragment(R.layout.fragment1) {
         if (userName != null) {
             lateinit var userData: UserData
             lifecycleScope.launch {
-                userData = appDb.userDao().findByRoll(userName.toString())
+                userData = appDb.userDao().findByRoll(userName.toString())!!
                 displayData(userData)
             }
         }

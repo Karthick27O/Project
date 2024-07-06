@@ -18,10 +18,10 @@
             android:name=".fragment.ActivityFragment"
             android:exported="false"/>
         <activity
-            android:name=".SecondActivity"
+            android:name=".RegistrationActivity"
             android:exported="false" />
         <activity
-            android:name=".SecondActivity"
+            android:name=".RegistrationActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

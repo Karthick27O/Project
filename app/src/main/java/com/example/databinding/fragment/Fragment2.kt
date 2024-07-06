@@ -6,8 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.core.view.isVisible
+import android.view.ViewGroup import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -18,7 +17,6 @@ import com.example.databinding.retrofit.RetrofitInstance
 import com.example.databinding.retrofit.TodoAdapter
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import retrofit2.HttpException
 import java.io.IOException
 
 class Fragment2: Fragment(R.layout.fragment2) {
@@ -42,7 +40,7 @@ class Fragment2: Fragment(R.layout.fragment2) {
                 Log.e(ContentValues.TAG, "IOException, you might not have internet connection")
                 binding.progressBar.isVisible = false
                 return@launch
-            } catch (e: HttpException) {
+            } catch (e: retrofit2.HttpException) {
                 Log.e(ContentValues.TAG, "HttpException, unexpected response")
                 binding.progressBar.isVisible = false
 
