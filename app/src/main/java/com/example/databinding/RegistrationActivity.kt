@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
-import com.example.databinding.databinding.ActivityThirdBinding
+import com.example.databinding.databinding.ActivitySecondBinding
 import com.example.databinding.room_db.AppDataBase
 import java.util.regex.Pattern
 import com.example.databinding.room_db.UserData
@@ -25,6 +25,10 @@ class ThirdActivity : AppCompatActivity() {
 
         binding.buttonRegister.setOnClickListener {
             saveRegistration()
+        }
+        binding.buttonBack.setOnClickListener {
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
         }
     }
 
